@@ -15,10 +15,10 @@ export default function SignUp() {
   }
   const handleSubmit = async(e) => {
     e.preventDefault();
-
+    console.log(formData)
     try {
       setLoad(true);
-    const res = await fetch('/api/auth/sign-up', {
+    const res = await fetch('http://localhost:3000/api/auth/signup', {
       method: 'POST',
       headers: {
         'Content-Type':'application/json',
@@ -33,9 +33,10 @@ export default function SignUp() {
     }
     setLoad(false);
     setError(null);
-    navigate('/sign-up');
+    navigate('/sign-ip');
     } catch (error) {
       setLoad(false);
+      console.log(error)
       setError(error.message);
     }
     
