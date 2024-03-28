@@ -54,8 +54,8 @@ export const google = async (req, res, next) => {
         avatar: req.body.photo,
       });
       await newUSer.save();
-      const token = jwt.sign({ id: user._id }, "shamanth");
-      const { password: pass, ...rest } = user._doc;
+      const token = jwt.sign({ id: newUSer._id }, "shamanth");
+      const { password: pass, ...rest } = newUSer._doc;
       res
         .cookie("accessToken", token, { httpOnly: true })
         .status(200)
@@ -66,3 +66,12 @@ export const google = async (req, res, next) => {
     next(error);
   }
 };
+
+export const signOut = (req,res,next) => {
+  try {
+    res.clearCookie('accessToken');
+    res.status(201).json('User has been logged out');
+  } catch (error) {
+    next(error);    
+  }
+}
