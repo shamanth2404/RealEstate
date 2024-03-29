@@ -6,8 +6,10 @@ import {
   ref,
   uploadBytesResumable,
 } from "firebase/storage";
+import {useSelector} from 'react-redux'
 
 export default function CreateListing() {
+  const {currentUser} = useSelector(state => state.user);
   const [files, setFiles] = useState([]);
   const [formData, setFormaData] = useState({
     imageUrls: [],
@@ -22,6 +24,7 @@ export default function CreateListing() {
     offer: false,
     parking: false,
     furnished: false,
+    userRef: currentUser._id,
   });
   console.log(formData);
 
