@@ -1,10 +1,18 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { FaSearch } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 export default function Header() {
   const { currentUser } = useSelector((state) => state.user);
+  const navigate = useNavigate();
+  const [searchTerm,setSearchTerm] = useState("");
+  const handleSearch = (e) => {
+    const term = e.target.value;
+    setSearchTerm(term);
+    navigate(`/search/${searchTerm}`);
+  }
+  
   return (
     <header className="bg-slate-200 shadow-md">
       <div className="flex justify-between items-center max-w-6xl mx-auto p-3">
@@ -18,6 +26,7 @@ export default function Header() {
           <input
             type="text"
             placeholder="Search.."
+            onChange={handleSearch}
             className="bg-transparent focus:outline-none w-24 sm:w-64"
           />
           <FaSearch className="text-slate-600" />

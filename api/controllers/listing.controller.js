@@ -28,3 +28,73 @@ export const deleteListing = async (req,res,next) => {
         next(error);
     }
 }
+
+export const updateListing = async (req,res,next) => {
+    const listing = await Listing.findById(req.params.id);
+
+    if(!listing){
+        return next(errorHandler(404,'Lisitng Not found'));
+    }
+
+    if(req.user.id !== listing.userRef){
+        return next(errorHandler(401,'You can update your listing only'));
+    }
+
+    try {
+        const updatedListing = await Listing.findByIdAndUpdate(
+            req.params.id,
+            req.body,
+            {new: true},
+        )
+        res.status(200).json(updatedListing);
+    } catch (error) {
+        next(error);
+    }
+}
+
+export const getListing = async (req,res,next) => {    
+    try {
+       const listing = await Listing.findById(req.params.id);
+
+       if(!listing){
+            return next(errorHandler(404,'Lisitng Not found'));
+        }
+        res.status(200).json(listing);
+
+    } catch (error) {
+        next(error);
+    }
+}
+
+export const getAllListing = async (req,res,next) => {    
+    try {
+       const listing = await Listing.find();
+
+       if(!listing){
+            return next(errorHandler(404,'Lisitng Not found'));
+        }
+        res.status(200).json(listing);
+
+    } catch (error) {
+        next(error);
+    }
+}
+
+export const searchListing = async (req,res,next) => {
+    const {searchTerm} = req.body;
+    console.log(searchTerm)
+    try {
+        const listings = await Listing.find({
+            $or:[
+                {name:{$regex:searchTerm,$options: "i"}},
+                {description:{$regex:searchTerm,$options: "i"}},
+                {address:{$regex:searchTerm,$options: "i"}},
+            ]
+        });
+        console.log(listings)
+        res.status(200).json(listings);
+    } catch (error) {
+        next(error);
+    }
+
+}
