@@ -7,9 +7,11 @@ export default function Header() {
   const { currentUser } = useSelector((state) => state.user);
   const navigate = useNavigate();
   const [searchTerm,setSearchTerm] = useState("");
-  const handleSearch = (e) => {
+  const handleChange = (e) => {
     const term = e.target.value;
     setSearchTerm(term);
+  }
+  const handleSearch = () => {    
     navigate(`/search/${searchTerm}`);
   }
   
@@ -22,11 +24,11 @@ export default function Header() {
             <span className="text-slate-700">Estate</span>
           </h1>
         </Link>
-        <form className="bg-slate-100 p-3 rounded-lg flex items-center">
+        <form onSubmit={handleSearch} className="bg-slate-100 p-3 rounded-lg flex items-center">
           <input
             type="text"
             placeholder="Search.."
-            onChange={handleSearch}
+            onChange={handleChange}
             className="bg-transparent focus:outline-none w-24 sm:w-64"
           />
           <FaSearch className="text-slate-600" />

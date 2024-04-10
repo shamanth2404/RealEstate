@@ -56,6 +56,7 @@ export default function Home() {
               <div className="font-bold text-xl mb-2">{listing.name}</div>
               <p className="text-gray-700 text-base">{listing.address}</p>
               <p className="text-gray-700 text-base">{listing.discountPrice}</p>
+              
             </div>
           </div>
           

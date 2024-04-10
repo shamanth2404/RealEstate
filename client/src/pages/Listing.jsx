@@ -8,8 +8,7 @@ import "swiper/css/bundle";
 export default function Listing() {
   SwiperCore.use([Navigation]);
   const params = useParams();
-  const [listing, setListing] = useState();
-  console.log(listing)
+  const [listing, setListing] = useState();  
   
     const fetchListing = async () => {
       try {
@@ -19,6 +18,7 @@ export default function Listing() {
           console.log(data);
           return;
         }
+        console.log(data);
         setListing(data);
         
       } catch (error) {
@@ -39,7 +39,7 @@ export default function Listing() {
             {listing.imageUrls.map((url) => (
               <SwiperSlide key={url}>
                 <div
-                  className="h-[300px]"
+                  className="h-[300px] w-[900px] mx-auto"
                   style={{
                     background: `url(${url}) center no-repeat`,
                     backgroundSize: "cover",
@@ -50,24 +50,37 @@ export default function Listing() {
           </Swiper>
         </div>
       )}  
-      <div className="bg-white shadow-md rounded-md p-6 mb-4">
-      <h2 className="text-xl font-bold mb-2">{listing && listing.name}</h2>
-      <p className="text-gray-600 mb-4">{listing && listing.description}</p>
-      <div className="flex items-center mb-4">
-        <span className="text-gray-800 font-bold mr-2">${listing && listing.regularPrice}</span>
-        {listing && listing.discountedPrice && <span className="text-red-500 font-bold">${listing && listing.discountedPrice}</span>}
+      {listing && (
+        <div className="container mx-auto px-4 py-8">
+          <div className="flex gap-3 items-center mb-4">
+          <h1 className="text-3xl font-bold">{listing.name}</h1>
+          {listing.offer ? (
+            <>
+              <p className="text-xl">${listing.discountPrice}</p>
+              <p className="text-sm text-gray-500 line-through"> ${listing.regularPrice}</p>
+            </>
+          ) : (
+            <p className="text-xl">${listing.regularPrice}</p>
+          )}
+          </div>
+        
+        <p className="text-gray-700 mb-4">{listing.address}</p>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="border border-gray-300 p-4 rounded-lg">
+            <h2 className="text-xl font-bold mb-2">Description</h2>
+            <p>{listing.description}</p>
+          </div>
+          <div className="border border-gray-300 p-4 rounded-lg">
+            <h2 className="text-xl font-bold mb-2">Details</h2>
+            <p>Type: {listing.type}</p>
+            <p>Bedrooms: {listing.bedrooms}</p>
+            <p>Bathrooms: {listing.bathrooms}</p>
+            <p>Parking: {listing.parking ? 'Yes' : 'No'}</p>
+            <p>Furnished: {listing.furnished ? 'Yes' : 'No'}</p>
+          </div>
+        </div>        
       </div>
-      <div className="grid grid-cols-2 gap-4">
-        <div>
-          <p className="text-sm text-gray-500">Bedrooms</p>
-          <p className="font-bold">{listing && listing.bedrooms}</p>
-        </div>
-        <div>
-          <p className="text-sm text-gray-500">Bathrooms</p>
-          <p className="font-bold">{listing && listing.bathrooms}</p>
-        </div>
-      </div>
-    </div>    
+      )}    
     </main>
     
   );
