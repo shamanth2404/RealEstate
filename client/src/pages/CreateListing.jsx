@@ -24,9 +24,9 @@ export default function CreateListing() {
     offer: false,
     parking: false,
     furnished: false,
-    userRef: currentUser._id,
+    userRef: currentUser.email,
   });
-  console.log(formData);
+  
 
   const handleImageUpload = (e) => {
     if (files.length > 0 && files.length + formData.imageUrls.length < 7) {
