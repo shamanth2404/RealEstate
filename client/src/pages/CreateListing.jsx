@@ -7,10 +7,13 @@ import {
   uploadBytesResumable,
 } from "firebase/storage";
 import {useSelector} from 'react-redux'
+import { useNavigate } from "react-router-dom";
 
 export default function CreateListing() {
+  const navigate = useNavigate();
   const {currentUser} = useSelector(state => state.user);
   const [files, setFiles] = useState([]);
+  const [imageUploading,setImageUploading] = useState(false);
   const [formData, setFormaData] = useState({
     imageUrls: [],
     name: "",
@@ -29,6 +32,7 @@ export default function CreateListing() {
   
 
   const handleImageUpload = (e) => {
+    setImageUploading(true);
     if (files.length > 0 && files.length + formData.imageUrls.length < 7) {
       const promises = [];
 
@@ -41,13 +45,17 @@ export default function CreateListing() {
             ...formData,
             imageUrls: formData.imageUrls.concat(urls),
           });
+          setImageUploading(false);
         })
         .catch((err) => {
+          setImageUploading(false);
           console.log(err);
         });
     } else {
       console.log("Max 6 images");
+      setImageUploading(false);
     }
+    
   };
 
   const storeImage = async (file) => {
@@ -113,7 +121,8 @@ export default function CreateListing() {
       })
       const data = await res.json();
       if(data.success === false){
-        console.log(data.message);        
+        console.log(data.message);   
+        navigate('/')     
       }
       console.log(data)
     } catch (error) {
@@ -280,6 +289,7 @@ export default function CreateListing() {
               Upload
             </button>
           </div>
+          {imageUploading && <div className="text-red-500">Uploading...</div>}
           {formData.imageUrls.length > 0 &&
             formData.imageUrls.map((url, index) => (
               <div
